@@ -27,7 +27,7 @@ end
 tmp.close
 
 # exec editor to modify fn
-system("$EDITOR #{tmp_fn}")
+system("$EDITOR #{tmp_fn}") or system("vi #{tmp_fn}") or (puts "couldn't open the file with a text editor.."; exit 3)
 
 # load new names
 tmp = File.new(tmp_fn, "r") or (puts "couldn't open file for reading...";exit 7)
