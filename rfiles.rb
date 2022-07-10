@@ -15,6 +15,13 @@ ARGV.empty? and (usage;exit 2)
 files = ARGV
 old_fn = []
 
+# check if files exist
+# and have rename permissions
+files.each do |f|
+  if not File.exists?(f) then puts "#{f}: doesn't exist..."; exit 2 end
+  if not File.writable?(Dir.new(Dir.getwd)) then puts "not write permission to rename files in this directory..."; exit 2 end
+end
+
 # create tmp file
 tmp_fn = "#{Time.now.nsec}_tmp_rename"
 tmp = File.new(tmp_fn, "w+") or (puts "couldn't open file for writing...";exit 9)
@@ -37,7 +44,7 @@ tmp.each do |f|
 end
 
 # change filename
-if old_fn.length != new_fn.length then (puts "not the same amount of files"; tmp.close; File.delete(tmp); exit 6) end  
+if old_fn.length != new_fn.length then puts "not the same amount of files"; tmp.close; File.delete(tmp); exit 6 end  
 new_fn.each_index do |i|
   if old_fn[i] != new_fn[i]
     File.rename(old_fn[i], new_fn[i])
